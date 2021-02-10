@@ -26,7 +26,7 @@ app.get('/califications/:id', (req, res) => {
         }
     });
     return res.status(404).json({
-        ok: false,
+
         msg: "Alumn not found"
     });
 
@@ -36,10 +36,11 @@ app.get('/califications/:id', (req, res) => {
 app.post('/califications', (req, res) => {
     var { name, calification } = req.body;
     var alumn = new Alumn(id, name, calification);
-    console.log(alumn);
     califications.push(alumn);
     id++;
-    res.sendStatus(200);
+    return res.status(200).json({
+        alumn
+    });
 });
 
 //Update an alumn
@@ -71,11 +72,40 @@ app.put('/califications/:id', (req, res) => {
 });
 
 //Delete an alumn
-app.delete('/califications:id', (req, res) => {
+app.delete('/califications/:id', (req, res) => {
 
     let id = req.params.id;
 
+
+    let index = -1;
+
+    //Searching the alumn
+    for (al of califications){
+        if (al.id == id) {
+            index = id;
+        }
+    }
+   
+    if (index == -1) {
+        return res.status(404).json({
+            ok: false,
+            message: "Alumn not found"
+        });
+    }
+    
+    else {
+        let deletedAlumn = califications[index];
+        console.log(califications);
+        califications.splice(index, 1);
+        console.log(califications);
+
+        return res.status(200).json({
+            ok: true,
+            deletedAlumn
+        });
+    }
+
 });
 
-app.listen(3000)
+app.listen(3000);
 console.log("Server online on port 3000");
