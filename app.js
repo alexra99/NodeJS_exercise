@@ -75,30 +75,26 @@ app.put('/califications/:id', (req, res) => {
 app.delete('/califications/:id', (req, res) => {
 
     let id = req.params.id;
-
-
     let index = -1;
 
     //Searching the alumn
-    for (al of califications){
-        if (al.id == id) {
-            index = id;
+    for (var i = 0; i< califications.length; i++) {
+        if (califications[i].id == id) {
+            index = i;
         }
     }
-   
     if (index == -1) {
         return res.status(404).json({
             ok: false,
             message: "Alumn not found"
         });
     }
-    
+
     else {
         let deletedAlumn = califications[index];
         console.log(califications);
         califications.splice(index, 1);
         console.log(califications);
-
         return res.status(200).json({
             ok: true,
             deletedAlumn
@@ -106,6 +102,8 @@ app.delete('/califications/:id', (req, res) => {
     }
 
 });
+
+
 
 app.listen(3000);
 console.log("Server online on port 3000");
